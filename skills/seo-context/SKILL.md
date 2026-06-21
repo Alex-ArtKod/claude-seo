@@ -1,6 +1,6 @@
 ---
 name: seo-context
-description: "Analyzes heavy research files once per project and distills them into project-context.md (how to write) plus fact recommendations for rules.md. Run once at project setup and again when source research changes. Use when user says analyze project, build context, обнови контекст, проанализируй исследования, project-context."
+description: "Analyzes heavy research files once per project and distills them into project-context.md (a reusable knowledge base for writing: company, products, competitors, market, region) plus exact-fact recommendations for rules.md. Run once at project setup and again when source research changes. Use when user says analyze project, build context, обнови контекст, проанализируй исследования, project-context."
 user-invokable: true
 argument-hint: "[project-folder]"
 license: MIT
@@ -15,16 +15,27 @@ metadata:
 ## Purpose
 
 Heavy research files (company research, regional/niche research) are expensive to
-re-read for every article. This skill reads them **once** and distills them into a
-compact, reusable context. The companion skill `/seo-writer` then writes articles
-using only the distilled files — never the heavy sources.
+re-read for every article. This skill reads them **once** and pulls out **everything
+useful for writing articles**, so the source files never have to be opened again. The
+companion skill `/seo-writer` then writes articles from the distilled files only —
+never the heavy sources.
 
-Outputs:
-1. **`project-context.md`** — *how to write* (positioning, audience, region, tone,
-   themes, target action). Contains **zero verifiable facts** — no numbers, names,
-   prices, ratings. Those live in `rules.md`.
-2. **Recommendations for `rules.md`** — verifiable facts found in the research that
-   are not yet in `rules.md`. Shown to the user, who approves what to add.
+The extracted knowledge is split across two outputs:
+
+1. **`project-context.md`** — the **reusable knowledge base** for writing. Holds all
+   the descriptive, useful information from the research: what the company does, its
+   products/services and advantages, competitors, market and niche situation, region,
+   audience and target action, recurring themes and customer questions. This is the
+   bulk of the value — write down anything a writer would otherwise have to dig out of
+   the source files. The only thing it does **not** contain is the exact, checkable
+   facts — those are extracted to `rules.md` so there is a single source of truth for
+   fact-checking.
+2. **Recommendations for `rules.md`** — the exact verifiable facts found in the
+   research (numbers, prices, guarantees, ratings, certifications, expert names+roles)
+   that are not yet in `rules.md`. Shown to the user, who approves what to add.
+
+Together the two files let `/seo-writer` work fully from distilled inputs:
+`project-context.md` for background and context, `rules.md` for exact facts.
 
 `rules.md` is the human-verified source of truth for the fact-checker. This skill
 never silently rewrites it — it only appends facts the user approves.
@@ -44,7 +55,8 @@ Locate in the project folder (ask for the path if not given).
 
 If a required research file is missing, name it and stop. If an editorial policy
 file exists, note it — `/seo-writer` applies it on top of `copywriter.md`; this
-skill folds its *style* guidance into `project-context.md` (not its facts).
+skill folds its *style* guidance into the "Тон и стиль" section of
+`project-context.md` (its exact facts, if any, go to `rules.md`).
 
 ---
 
@@ -169,31 +181,41 @@ overwrite it.** If the file exists:
    the research is treated as a hand-written addition — carry it over by default; only
    drop it if the user says so. Never discard hand-written content silently.
 
-Then write the file. **How to write only — no verifiable facts** (those live in
-`rules.md`):
+Then write the file. This is the **knowledge base** for writing — capture everything
+useful from the research so the source files never need re-reading. The **only**
+content that does not go here is exact verifiable facts (precise numbers, prices,
+guarantees, ratings, certifications, expert names+roles) — those are extracted to
+`rules.md`. Where context needs to mention such a fact, describe it qualitatively
+("многолетняя гарантия", "цены ниже среднерыночных") and leave the exact value to
+`rules.md`. Be generous with everything else: the writer reads both files.
 
 ```markdown
 <!-- seo-context | sources: {company_file}, {regional_file} | updated: {YYYY-MM-DD} -->
 
-## Позиционирование
-{что компания делает / не делает, как себя подаёт, для кого, домен и название}
+## Компания
+{что делает и чего не делает, как себя подаёт, домен и название, УТП, подход,
+ключевые преимущества — описательно, без точных цифр}
+
+## Продукты и услуги
+{направления, что входит в каждое, особенности, для каких задач — без точных цен}
+
+## Конкуренты
+{кто основные конкуренты, как компания отличается, на чём строит позиционирование}
+
+## Рынок и ниша
+{состояние рынка, спрос, тенденции, типичные боли и возражения клиентов}
+
+## Регион
+{специфика регионального рынка, районы и ориентиры, локальные особенности и сигналы}
 
 ## Аудитория и целевое действие
-{кто читатель, сегмент, к какому действию ведём — заявка/консультация/проект}
+{кто читатель, сегменты, к какому действию ведём — заявка/консультация/проект}
+
+## Темы и акценты для статей
+{приоритетные темы и интенты, частые вопросы, на чём делать упор для этого клиента}
 
 ## Тон и стиль
 {голос бренда сверх copywriter.md; если есть редполитика — её стилевые установки}
-
-## Регион
-### Специфика рынка
-{качественная картина рынка — без конкретных цен}
-### Конкуренты и отличия
-{как компания отличается локально — без проверяемых цифр}
-### Локальные сигналы
-{районы, ориентиры — названия, не факты-обещания}
-
-## Темы и акценты
-{на чём делать упор в статьях этого клиента; приоритетные интенты}
 ```
 
 ### Step 6 — Quality check (compare before / after)
@@ -203,16 +225,20 @@ the old `rules.md`) and report a pass/fail on each guardrail:
 
 ```
 ## Quality check
-1. Удалён ли важный контент из старого project-context.md?   {нет ✓ / да ⚠ — что}
-2. Стало ли меньше фактов в rules.md, чем было?              {нет ✓ / да ⚠}
-3. Новые факты добавлены только через rules.md (не в context)? {да ✓ / нет ⚠}
-4. Уменьшился ли объём контекста (project-context.md)?         {да ✓ N→M строк / нет}
-5. Сможет ли /seo-writer писать без тяжёлых исследований?      {да ✓ / нет — чего не хватает}
+1. Удалён ли важный контент из старого project-context.md?      {нет ✓ / да ⚠ — что}
+2. Стало ли меньше фактов в rules.md, чем было?                 {нет ✓ / да ⚠}
+3. Точные факты ушли в rules.md, а не в project-context.md?     {да ✓ / нет ⚠ — какие}
+4. project-context.md заметно компактнее тяжёлых исследований?  {да ✓ / нет ⚠}
+5. Сможет ли /seo-writer писать без тяжёлых исследований?       {да ✓ / нет — чего не хватает}
 ```
 
+Item 5 is the decisive one: project-context.md + rules.md must together cover what a
+writer needs, so the heavy sources are never opened. If anything useful is missing,
+add it to project-context.md (or recommend it for rules.md) before finishing.
+
 Any ⚠ must be surfaced to the user before declaring success. A shrinking `rules.md`
-fact count or a fact that leaked into `project-context.md` is a failure — fix before
-finishing.
+fact count or an exact fact that leaked into `project-context.md` instead of `rules.md`
+is a failure — fix before finishing.
 
 ### Step 7 — Report
 
@@ -238,7 +264,7 @@ are kept.
 
 | File | Content |
 |------|---------|
-| `project-context.md` | Distilled "how to write" context (no facts) |
+| `project-context.md` | Distilled knowledge base for writing (company, products, competitors, market, region, audience, themes); no exact facts |
 | `project-context.bak.md` | Backup of the previous context (written before overwrite) |
 | `rules.md` | Human-verified facts + SAFE/NEVER/Эксперты (only approved additions) |
 
