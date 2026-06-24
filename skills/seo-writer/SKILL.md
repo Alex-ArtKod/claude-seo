@@ -3,12 +3,13 @@ name: seo-writer
 description: >
   Autonomous SEO article writer. Runs in a project folder of TZ subfolders and
   writes each one to a publication-ready article + DOCX, fully unattended. The
-  editor (not the user) approves the plan. /seo-writer N processes N folders in
-  parallel. Distilled inputs only (project-context.md + rules.md + TZ) — heavy
-  research is never re-read. Use when user says write articles, напиши статьи,
-  seo text, or runs the pipeline over a project folder.
+  editor (not the user) approves the plan. /seo-writer N writes exactly N
+  articles (also the max parallelism); default N=1 writes one article and stops.
+  Distilled inputs only (project-context.md + rules.md + TZ) — heavy research
+  is never re-read. Use when user says write articles, напиши статьи, seo text,
+  or runs the pipeline over a project folder.
 user-invokable: true
-argument-hint: "[N parallel sessions, default 1]"
+argument-hint: "[N articles to write, default 1]"
 license: MIT
 metadata:
   author: AlexNox
@@ -80,7 +81,9 @@ A folder is **eligible** when it has a TZ `.md`, `project-context.md`, and
 
 ## Orchestrator (main skill flow)
 
-`N` = integer argument (default 1) = folders processed in parallel.
+`N` = integer argument (default 1) = **total articles to write in this run**
+(also the max parallelism). The orchestrator stops as soon as N articles have
+been completed and archived, even if the queue has more folders.
 
 1. **Scan** the project folder; build the work queue (exclude `Готовые/` and fresh
    `.in_progress`).
@@ -91,13 +94,16 @@ A folder is **eligible** when it has a TZ `.md`, `project-context.md`, and
    absolute folder path, the absolute paths to this skill's `references/` and
    `scripts/`, and: **"Execute the Per-folder writer pipeline in
    seo-writer/SKILL.md for this folder, end to end. Do not ask questions."**
-4. **Keep N in flight.** When a writer finishes (its folder is now in `Готовые/`),
-   pull the next folder and dispatch a new writer.
+   Track `total_dispatched`; never dispatch more than N folders total.
+4. **Keep up to N in flight, but no more than N total.** When a writer finishes
+   (its folder is now in `Готовые/`) and `total_dispatched < N`, pull the next
+   folder and dispatch a new writer. Once `total_dispatched == N`, wait for all
+   in-flight writers to finish, then go to step 6.
 5. **On usage limits** → go to Limit handling.
-6. Queue drained and all writers finished → print:
-   `✓ Готово: {K} статей в Готовые/. Новые факты — в recom_rules.md.`
+6. N articles completed → print:
+   `✓ Готово: {N} статей в Готовые/. Новые факты — в recom_rules.md.`
 
-For `N = 1`, run the pipeline inline (no subagent), folder after folder.
+For `N = 1`, run the pipeline inline (no subagent) for exactly one folder, then stop.
 
 ---
 
@@ -183,8 +189,9 @@ Append each to `{folder}/recom_rules.md` **and** to `{project}/recom_rules.md`
 **Never write to `rules.md`.** The human promotes approved facts later.
 
 ### Phase 6 — DOCX export
-1. **Filename** — scan the TZ for the title: first `# H1`, else first `## H2`.
+1. **Filename** — take the TZ `.md` file's own filename, strip the `.md` extension.
    Sanitize for Windows (strip `/ \ : * ? " < > |`), trim. Final: `{title}.docx`.
+   Example: `Что лучше имплант или протез.md` → `Что лучше имплант или протез.docx`.
 2. **Primary — Word COM** via `references/md-to-docx.ps1` (rich formatting: styled
    expert quotes, bordered tables with header fill, H1/H2/H3 sizes). Run it in a
    **separate agent/session** so it does not consume the writer's context:
