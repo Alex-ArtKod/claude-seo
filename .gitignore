@@ -5,6 +5,12 @@ output/
 *.bak
 *.swp
 
+# Local work materials (not part of the skill set)
+/text/
+/json/
+/AGROMIGZAVOD-SEO-REPORT.html
+*-SEO-REPORT.html
+
 # OS files
 .DS_Store
 Thumbs.db

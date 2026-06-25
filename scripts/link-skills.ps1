@@ -20,7 +20,7 @@
 #>
 
 # Skills to link. Add a folder name here when you create a new local skill.
-$skills = @('seo-write', 'seo-writer', 'seo-context')
+$skills = @('seo-write', 'seo-writer', 'seo-context', 'detailed-editor', 'seo-tz-generator', 'seo-rewies-writer')
 
 $repoSkills  = Join-Path $PSScriptRoot '..\skills' | Resolve-Path | Select-Object -ExpandProperty Path
 $skillsHome  = Join-Path $env:USERPROFILE '.claude\skills'
