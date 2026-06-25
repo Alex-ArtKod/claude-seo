@@ -152,6 +152,35 @@ claude-seo/
 | `/seo dataforseo [command]` | Live SEO data via DataForSEO MCP (extension) |
 | `/seo image-gen [use-case] <desc>` | AI image generation for SEO assets (extension) |
 
+## Local-only Skills (RU content pipeline)
+
+These skills are maintained in this fork on top of the upstream SEO set. They are
+**not** auto-discovered from the repo — Claude Code reads skills from
+`~/.claude/skills/`, so run `scripts/link-skills.ps1` once per machine to junction
+them in. Add any new local skill folder to the `$skills` list in that script.
+
+```
+skills/
+  seo-context/        # Distills heavy research into project-context.md + rules.md recommendations
+  seo-write/          # SEO article writer (5-phase pipeline, DOCX export)
+  seo-writer/         # Autonomous SEO article writer over a folder of TZ subfolders (/seo-writer N)
+  detailed-editor/    # Detailed editor for finished RU text (services / articles / ratings)
+  seo-tz-generator/   # Autonomous SEO ТЗ (brief) generator from a topic list, grounded in live Google/Yandex SERP via xmlriver (/seo-tz-generator N)
+  seo-rewies-writer/  # Generates batches of realistic, varied RU customer reviews for a company
+```
+
+| Command | Purpose |
+|---------|---------|
+| `/seo-context` | Build project knowledge base from research files |
+| `/seo-write` | Write one SEO article from a project folder (TZ + research) |
+| `/seo-writer [N]` | Autonomously write N articles over a folder of TZ subfolders |
+| `/detailed-editor` | Detailed edit/proofread of a finished RU article against its TZ |
+| `/seo-tz-generator [N]` | Generate N SEO ТЗ from a topic list using live SERP data |
+| `/seo-rewies-writer [-i]` | Generate a batch of realistic RU customer reviews |
+
+Credentials for `seo-tz-generator` (xmlriver): `XMLRIVER_USER` / `XMLRIVER_KEY`
+env vars, or `~/.config/claude-seo/xmlriver.json` — never committed.
+
 ## Development Rules
 
 - Keep SKILL.md files under 500 lines / 5000 tokens
