@@ -1,0 +1,50 @@
+# Стоп-лист агрегаторов, маркетплейсов и площадок-каталогов.
+# Один домен на строку (без www, без протокола). Строки с # игнорируются.
+# Используется harvest.js для исключения непрямых конкурентов из ТОПа.
+
+# Маркетплейсы / товарные агрегаторы
+avito.ru
+ozon.ru
+wildberries.ru
+market.yandex.ru
+tiu.ru
+pulscen.ru
+flagma.ru
+satom.ru
+blizko.ru
+regmarkets.ru
+agroserver.ru
+all.biz
+prom.ua
+
+# Услуги / каталоги исполнителей
+profi.ru
+youdo.com
+yandex.ru
+uslugi.yandex.ru
+remontnik.ru
+houzz.ru
+zoon.ru
+yell.ru
+2gis.ru
+flamp.ru
+
+# Контент-агрегаторы / UGC / справочники
+dzen.ru
+zen.yandex.ru
+pikabu.ru
+otzovik.com
+irecommend.ru
+vc.ru
+habr.com
+pinterest.com
+pinterest.ru
+youtube.com
+wikipedia.org
+ru.wikipedia.org
+
+# Доски/объявления недвижимости
+cian.ru
+domclick.ru
+realty.yandex.ru
+n1.ru

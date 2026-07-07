@@ -1,0 +1,11 @@
+{
+  "name": "seo-tz-generator",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Генератор ТЗ для копирайтеров на основе реального анализа ТОПа (XMLRiver + parseHtmlPage).",
+  "scripts": {
+    "harvest": "node scripts/harvest.js",
+    "analyze": "node scripts/analyze-top.js"
+  }
+}
