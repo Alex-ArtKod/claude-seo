@@ -1,0 +1,14 @@
+{
+  "name": "indexlift-seo-auditor",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Single-page SEO auditor (Google/Yandex). Provides the cheerio-based HTML parser reused by seo-tz-generator.",
+  "main": "scripts/run-audit.js",
+  "scripts": {
+    "audit": "node scripts/run-audit.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  }
+}

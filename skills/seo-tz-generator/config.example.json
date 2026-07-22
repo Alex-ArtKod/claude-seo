@@ -1,0 +1,7 @@
+{
+  "XMLRIVER_USER": "ВАШ_USER_ID_С_xmlriver.com/queries",
+  "XMLRIVER_KEY": "ВАШ_API_KEY_С_xmlriver.com/queries",
+  "yandexRegion": "213",
+  "googleLoc": "2643743",
+  "_comment": "yandexRegion: код региона Яндекса (Москва=213, СПб=2). googleLoc: id геолокации Google (Москва=2643743). Скопируйте файл в config.json и впишите ключи. config.json игнорируется git и не коммитится."
+}
