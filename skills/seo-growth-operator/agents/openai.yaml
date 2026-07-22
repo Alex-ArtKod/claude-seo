@@ -1,0 +1,4 @@
+interface:
+  display_name: "SEO Growth Operator"
+  short_description: "Запускает и ведёт сквозную SEO-систему"
+  default_prompt: "Use $seo-growth-operator to build a measurable 90-day SEO growth system for this website."

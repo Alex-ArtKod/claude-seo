@@ -1,0 +1,8 @@
+{
+  "name": "seo-audit-docx-generator",
+  "private": true,
+  "description": "DOCX-генератор для /seo audit в фирменном стиле Artkod (см. generate-audit-docx.js)",
+  "dependencies": {
+    "docx": "^9.7.1"
+  }
+}

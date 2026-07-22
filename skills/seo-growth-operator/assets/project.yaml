@@ -1,0 +1,27 @@
+schema_version: "1.0"
+project:
+  name: "{{PROJECT_NAME}}"
+  mode: "{{PROJECT_MODE}}"
+site:
+  primary_url: "{{PRIMARY_URL}}"
+market:
+  countries:
+    - "{{MARKETS}}"
+  languages:
+    - "{{LANGUAGES}}"
+business:
+  type: "{{BUSINESS_TYPE}}"
+  priority_offers: []
+  target_buyers: []
+  constraints: []
+measurement:
+  primary_conversion: "{{PRIMARY_CONVERSION}}"
+  analytics_timezone: "unknown"
+  attribution_model: "unknown"
+governance:
+  live_changes_authorized: false
+  approved_by: ""
+  factual_claims_owner: ""
+cadence:
+  sprint_weeks: 2
+  monthly_review_day: "unknown"
