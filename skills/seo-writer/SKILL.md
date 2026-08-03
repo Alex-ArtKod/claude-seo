@@ -138,7 +138,20 @@ present. Load reference prompts once from `references/`: `copywriter.md`,
 3. Save the approved plan to `{folder}/article-plan.md`.
 
 ### Phase 2 — Block-by-block writing
-Process blocks sequentially. For each, the 5-step pipeline:
+"Blocks" here means every H2 block **plus the intro and the conclusion** —
+there is no separate, lighter path for intro/conclusion. Process them
+sequentially through the same 5-step pipeline:
+
+**Intro warning:** the intro is usually a light paraphrase of the TZ's
+"Прямой ответ"/lead field, and that field is written *dense on purpose* —
+multiple facts packed into one sentence for AI-citation extraction. Carrying
+that density into the intro almost verbatim produces the single worst-read
+paragraph in the article (stacked passive voice, comma-spliced unrelated
+facts, retrospective "these N mechanisms" labels the reader was never shown
+counted). Treat the intro as requiring a full rewrite pass, not a paraphrase:
+run it through the real 5-step pipeline below, and in step 4 explicitly check
+for humanizer rule 9 (passive voice) and rule 7b (comma/colon-spliced facts)
+— these are the two that a rushed intro violates most often.
 
 1. **Write** — apply `copywriter.md` (and `редполитика*.md` on top if present;
    project policy overrides on conflict). Answer-first; all H3s; LSI naturally;
