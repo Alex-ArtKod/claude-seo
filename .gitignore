@@ -151,3 +151,12 @@ youtube-description*.md
 
 # Internal implementation plans / specs (working notes, not user docs)
 docs/superpowers/
+
+# Инфраструктура студии и клиентские данные живут в приватном Alex-ArtKod/claude
+# и в ~/.claude/env. Репозиторий публичный — сюда они попадать не должны.
+skills/artkod-site/
+**/access.local.md
+**/*.local.md
+**/*.local.json
+reports/
+skills/**/deliverables/
